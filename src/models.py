@@ -7,23 +7,63 @@ from eralchemy2 import render_er
 
 Base = declarative_base()
 
-class Person(Base):
-    __tablename__ = 'person'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
+class User(Base):
+    __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
 
-class Address(Base):
-    __tablename__ = 'address'
-    # Here we define columns for the table address.
-    # Notice that each column is also a normal Python instance attribute.
+    user_favorites = relationship("User_favorites", back_populates="user")
+    
+    username = Column(String(250), nullable=False)
+    password = Column(String(250), nullable=False)
+    firstname = Column(String(250), nullable=False)
+    lastname = Column(String(250), nullable=False)
+    email = Column(String(250), nullable=False)
+
+class Favorites(Base):
+    __tablename__ = 'favorites'
     id = Column(Integer, primary_key=True)
-    street_name = Column(String(250))
-    street_number = Column(String(250))
-    post_code = Column(String(250), nullable=False)
-    person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
+    favorite = Column(String(250), nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    entitytype = Column(String(250), nullable=False)
+    planetid = Column(String(250), nullable=False)
+    characterid = Column(String(250), nullable=False)
+    
+    
+
+class Characters(Base):
+    __tablename__ = 'characters'
+    id = Column(Integer, primary_key=True)
+
+    user_favorites = relationship("User_favorites", back_populates="character")
+
+    BirthYear = Column(String(250), nullable=False)
+    EyeColor = Column(String(250), nullable=False)
+    Homeworld = Column(String(250), nullable=False)
+    Films = Column(String(250), nullable=False)
+    Species = Column(String(250), nullable=False)
+    Height = Column(String(250), nullable=False)
+    
+    mediatype = Column(String(250), nullable=False)
+    url = Column(String(250), nullable=False)
+    entity_id = Column(Integer, ForeignKey('favorites.id')) 
+    
+class Planets(Base):
+    __tablename__ = 'planets'
+    id = Column(Integer, primary_key=True)
+
+    user_favorites = relationship("User_favorites", back_populates="planets")
+
+    BirthYear = Column(String(250), nullable=False)
+    Films = Column(String(250), nullable=False)
+    HabitantSpecies = Column(String(250), nullable=False)
+    Size = Column(String(250), nullable=False)
+    
+    mediatype = Column(String(250), nullable=False)
+    url = Column(String(250), nullable=False)
+    post_id = Column(Integer, ForeignKey('post.id')) 
+
+
+
 
     def to_dict(self):
         return {}
